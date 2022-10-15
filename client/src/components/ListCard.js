@@ -34,20 +34,32 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setIsListNameEditActive();
+            store.setlistNameActive();
         }
         setEditActive(newActive);
     }
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
+            
             let id = event.target.id.substring("list-".length);
             store.changeListName(id, text);
             toggleEdit();
         }
     }
+
+    function handleDeletePlaylist(event) {
+        let id = event.target.id.substring("delete-list-".length);
+        //let id = event.target.id;
+        event.target.disabled = true;
+        console.log("handleDeletePlaylist: " + id);
+        store.deletePlaylist(id);
+   
+        //store.setCurrentList(null);
+    }
+
     function handleUpdateText(event) {
-        setText(event.target.value );
+        setText(event.target.value);
     }
 
     let selectClass = "unselected-list-card";
@@ -75,6 +87,7 @@ function ListCard(props) {
                 type="button"
                 id={"delete-list-" + idNamePair._id}
                 className="list-card-button"
+                onClick={handleDeletePlaylist}
                 value={"\u2715"}
             />
             <input

@@ -7,6 +7,7 @@ const Playlist = require('../models/playlist-model')
     @author McKilla Gorilla
 */
 createPlaylist = (req, res) => {
+    console.log("create playlist 1");
     const body = req.body;
     console.log("createPlaylist body: " + body);
 
@@ -39,6 +40,20 @@ createPlaylist = (req, res) => {
             })
         })
 }
+deletePlayList = async (req, res) => {
+    await Playlist.findOneAndDelete({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            console.log('hello')
+            return res.status(400).json({ success: false, error: err})
+        }
+
+        if (!list) {
+            return res.status(404).json({ success: false, error: 'Playlist not found'})
+        }
+
+        return res.status(200).json({ success: true, data: list})
+    }).catch(err => console.log(err))
+}
 getPlaylistById = async (req, res) => {
     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
         if (err) {
@@ -56,7 +71,7 @@ getPlaylists = async (req, res) => {
         if (!playlists.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Playlists not found` })
+                .json({ success: false, error: `Playlist not found` })
         }
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
@@ -84,6 +99,31 @@ getPlaylistPairs = async (req, res) => {
             }
             return res.status(200).json({ success: true, idNamePairs: pairs })
         }
+    }).catch(err => console.log(err))
+}
+
+addNewSong = async (req, res) => {
+    const body = req.body;
+    console.log("addNewSong body: " + body);
+    await Playlist.findOne({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+
+        list.songs.splice(list.songs.length, 0, {"title": "Untitled",
+            "artist": "Unknown",
+            "youTubeId": "dQw4w9WgXcQ"});
+        list
+            .save()
+            .then(() => {
+                return res.status(200).json({ success: true, playlist: list })
+            }).catch(err => {
+                return res.status(404).json({
+                    error,
+                    message: 'Song not created',
+                })
+            })
+    
     }).catch(err => console.log(err))
 }
 

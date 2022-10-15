@@ -16,8 +16,9 @@ const ListSelector = () => {
     }, []);
 
     function handleCreateNewList() {
-        store.createNewList();
+        store.createPlaylist();
     }
+    
     let listCard = "";
     if (store) {
         listCard = store.idNamePairs.map((pair) => (

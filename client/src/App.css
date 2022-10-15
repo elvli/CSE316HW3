@@ -71,12 +71,16 @@ body {
 }
 
 .playlister-button, .playlister-button-disabled {
-  font-size:36pt;
-  border-width: 0px;
-  float:left;
+  font-size: 36pt;
+  border-width: 1px;
+  float: left;
   color: black;
   cursor: pointer;
   opacity: 100%;
+  border-style: solid;
+  box-shadow: 2px 4px #888888;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .playlister-button:hover {
