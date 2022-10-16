@@ -139,9 +139,7 @@ createSong = async (req, res) => {
         if (err) {
             return res.status(404).json({err, message: "Playlist not found",})
         }
-        list.songs.splice(list.songs.length, 0, {"title": "Untitled",
-            "artist": "Unknown",
-            "youTubeId": "dQw4w9WgXcQ"});
+        list.songs.splice(body.index, 0, body.song);
         list
             .save()
             .then(() => {

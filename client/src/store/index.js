@@ -326,10 +326,10 @@ export const useGlobalStore = () => {
         }
     }
 
-    store.createSong = function () {
+    store.createSong = function (index, song) {
         console.log("createSong() called");
         async function asyncCreateSong() {
-            const response = await api.createSong(store.currentList._id);
+            const response = await api.createSong(store.currentList._id, index, song);
             console.log("currentlist: " + store.currentList);
             if (response.data.success) {
                 //let playlist = response.data.playlist;
@@ -341,7 +341,7 @@ export const useGlobalStore = () => {
                 }
             }
         }
-        asyncCreateSong();
+        asyncCreateSong(index, song);
     }
 
     // store.deleteSong = function () {
