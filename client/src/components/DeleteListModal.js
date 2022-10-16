@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom'
 */
 function DeleteListModal(){
     const { store } = useContext(GlobalStoreContext);
+    const history = useHistory();
 
     function handleConfirm(event) {
         event.stopPropagation();
@@ -19,14 +20,14 @@ function DeleteListModal(){
         event.stopPropagation();
         store.closeModal("delete-list-modal");
     }
-
+    //stoer.marledlist
+    // // let playlistName = store.
     let playlistName = store.getMarkedListName();
 
-    let modal = 
-    <div 
-        className="modal" 
-        id="delete-list-modal" 
-        data-animation="slideInOutLeft">
+    let modal = <div 
+    className="modal" 
+    id="delete-list-modal" 
+    data-animation="slideInOutLeft">
         <div className="modal-root" id='verify-delete-list-root'>
             <div className="modal-north">
                 Delete playlist?
@@ -49,7 +50,7 @@ function DeleteListModal(){
                     onClick={handleCancel}/>
             </div>
         </div>
-    </div>
+</div>
 
     if(store.isDeleteListModalOpen()) {
         document.getElementById("delete-list-modal").classList.add('is-visible');

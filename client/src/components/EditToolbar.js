@@ -14,14 +14,12 @@ function EditToolbar() {
     let enabledButtonClass = "playlister-button";
 
     function handleAddSong() {
-        if (store.currentList){
-            let index = store.getPlaylistSize();
-            console.log("index" + index);
-            let song = {"title": "Untitled",
-                "artist": "Unknown",
-                "youTubeId": "dQw4w9WgXcQ"};
-            store.createSong(index, song);
-        }
+        let index = store.getPlaylistSize();
+        console.log("index" + index);
+        let song = {"title": "Untitled",
+            "artist": "Unknown",
+            "youTubeId": "dQw4w9WgXcQ"};
+        store.createSong(index, song);
     }
     function handleUndo() {
         store.undo();
