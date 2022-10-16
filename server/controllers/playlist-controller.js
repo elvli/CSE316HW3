@@ -39,7 +39,6 @@ createPlaylist = (req, res) => {
         })
 }
 deletePlaylist = async (req, res) => {
-    console.log("backend deletplaylist: " + req.params.id)
     await Playlist.findByIdAndDelete({ _id: req.params.id }, (err, list) => {
         
         if (err) {
@@ -47,7 +46,6 @@ deletePlaylist = async (req, res) => {
         }
         return res.status(200).json({ success: true, data: list })
     }).catch(err => console.log(err)) 
-    console.log("backend deletplaylist end: " + req.params.id)
 }
 getPlaylistById = async (req, res) => {
     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
@@ -108,7 +106,7 @@ updatePlaylistById = async (req, res) => {
 
     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
         if (err) {
-            return res.status(404).json({err, message: "movie not found",})
+            return res.status(404).json({err, message: "Playlist not found",})
         }
         list.name = body.name
         list
@@ -127,30 +125,71 @@ updatePlaylistById = async (req, res) => {
             })
     })
 }
-
-addNewSong = async (req, res) => {
+createSong = async (req, res) => {
     const body = req.body;
+
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a Playlist',
+        })
+    }
+
     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
         if (err) {
-            return res.status(400).json({ success: false, error: err })
+            return res.status(404).json({err, message: "Playlist not found",})
         }
-
         list.songs.splice(list.songs.length, 0, {"title": "Untitled",
             "artist": "Unknown",
             "youTubeId": "dQw4w9WgXcQ"});
         list
             .save()
             .then(() => {
-                return res.status(200).json({ success: true, playlist: list })
-            }).catch(err => {
-                return res.status(404).json({
+                return res.status(200).json({
+                    success: true,
+                    id: list._id,
+                    message: 'List updated!',
+                })
+            }).catch(error => {
+                return res.status(400).json({
                     error,
-                    message: 'Song not created',
+                    message: 'Playlist Not Created!',
                 })
             })
-    
-    }).catch(err => console.log(err))
+    })
 }
+// deleteSong = async (req, res) => {
+//     const body = req.body;
+
+//     if (!body) {
+//         return res.status(400).json({
+//             success: false,
+//             error: 'You must provide a Playlist',
+//         })
+//     }
+
+//     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
+//         if (err) {
+//             return res.status(404).json({err, message: "Playlist not found",})
+//         }
+//         list.songs.splice(list.songs.length, 1);
+//         console.log(songs);
+//         list
+//             .save()
+//             .then(() => {
+//                 return res.status(200).json({
+//                     success: true,
+//                     id: list._id,
+//                     message: 'List updated!',
+//                 })
+//             }).catch(error => {
+//                 return res.status(400).json({
+//                     error,
+//                     message: 'Playlist Not Created!',
+//                 })
+//             })
+//     })
+// }
 
 module.exports = {
     createPlaylist,
@@ -158,6 +197,6 @@ module.exports = {
     getPlaylistPairs,
     getPlaylistById,
     deletePlaylist,
-    addNewSong,
+    createSong,
     updatePlaylistById,
 }

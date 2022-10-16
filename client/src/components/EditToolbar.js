@@ -15,7 +15,7 @@ function EditToolbar() {
 
     function handleAddSong() {
         console.log("add new song attempt");
-        store.createSong("63470538d83edd664947557e");
+        store.createSong();
     }
     function handleUndo() {
         store.undo();

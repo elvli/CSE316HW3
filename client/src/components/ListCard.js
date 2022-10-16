@@ -34,7 +34,7 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setIsListNameEditActive();
+            store.setlistNameActive();
         }
         setEditActive(newActive);
     }
@@ -43,6 +43,7 @@ function ListCard(props) {
         if (event.code === "Enter") {
             
             let id = event.target.id.substring("list-".length);
+            // console.log("during edit" + text);
             store.changeListName(id, text);
             toggleEdit();
         }
