@@ -16,11 +16,11 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
 
     function handleLoadList(event) {
-        if (!event.target.disabled && event.target.id == idNamePair._id) {
+        if (!event.target.disabled && event.target.id === idNamePair._id) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
-
+                
             // CHANGE THE CURRENT LIST
             store.setCurrentList(_id);
         }
@@ -28,33 +28,30 @@ function ListCard(props) {
 
     function handleToggleEdit(event) {
         event.stopPropagation();
+        setText(idNamePair.name);
         toggleEdit();
     }
 
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setlistNameActive();
+            store.setIsListNameEditActive(idNamePair);
         }
         setEditActive(newActive);
     }
 
     function handleKeyPress(event) {
+        setText(event.target.value);
         if (event.code === "Enter") {
-            
-            let id = event.target.id.substring("list-".length);
-            // console.log("during edit" + text);
-            store.changeListName(id, text);
+            store.changeListName(idNamePair, text);
             toggleEdit();
         }
     }
-
-    function handleDeletePlaylist(event) {
-        store.markListForDeletion(idNamePair);
-    }
-
     function handleUpdateText(event) {
         setText(event.target.value);
+    }
+    function handleDeletePlaylist(event){
+        store.markListForDeletion(idNamePair);
     }
 
     let selectClass = "unselected-list-card";
@@ -82,8 +79,8 @@ function ListCard(props) {
                 type="button"
                 id={"delete-list-" + idNamePair._id}
                 className="list-card-button"
-                onClick={handleDeletePlaylist}
                 value={"\u2715"}
+                onClick={handleDeletePlaylist}
             />
             <input
                 disabled={cardStatus}

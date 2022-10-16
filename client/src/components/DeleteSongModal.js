@@ -2,44 +2,44 @@ import { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { GlobalStoreContext } from '../store'
 
-function DeleteListModal() {
+function DeleteSongModal() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
 
     function handleConfirmModal(event){
         event.stopPropagation();
-        store.deletePlaylist();
+        store.deleteSong(store.getMarkedSongIndex());
     }
-    
+
     function handleCancelModal(event){
         event.stopPropagation();
-        store.closeModal("delete-list-modal");
+        store.closeModal("delete-song-modal");
     }
-    
-    let name = store.getMarkedListName();
+
+    let songTitle = store.getMarkedSongName();
 
     let modal = 
     <div 
         className="modal" 
-        id="delete-list-modal" 
+        id="delete-song-modal" 
         data-animation="slideInOutLeft">
-            <div className="modal-root" id='verify-delete-list-root'>
+            <div className="modal-root" id='verify-delete-song-root'>
                 <div className="modal-north">
-                    Delete playlist?
+                    Delete Song?
                 </div>
                 <div className="modal-center">
-                    <div className="modal-center-content">           
-                        Are you sure you wish to permanently delete the {name} playlist? 
+                    <div className="modal-center-content">
+                        Are you sure you wish to remove {songTitle} from the playlist?
                     </div>
                 </div>
                 <div className="modal-south">
                     <input type="button" 
-                        id="delete-list-confirm-button" 
+                        id="delete-song-confirm-button" 
                         className="modal-button" 
                         onClick={handleConfirmModal}
                         value='Confirm' />
                     <input type="button" 
-                        id="delete-list-cancel-button" 
+                        id="delete-song-cancel-button" 
                         className="modal-button" 
                         onClick={handleCancelModal}
                         value='Cancel' />
@@ -47,10 +47,10 @@ function DeleteListModal() {
             </div>
     </div>
 
-    if (store.isDeleteListModalOpen()) {
-        document.getElementById("delete-list-modal").classList.add("is-visible");
+    if (store.isDeleteSongModalOpen()) {
+        document.getElementById("delete-song-modal").classList.add("is-visible");
     }
 
     return (modal);
 }
-export default DeleteListModal;
+export default DeleteSongModal;

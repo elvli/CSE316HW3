@@ -18,7 +18,6 @@ const ListSelector = () => {
     function handleCreateNewList() {
         store.createPlaylist();
     }
-    
     let listCard = "";
     if (store) {
         listCard = store.idNamePairs.map((pair) => (

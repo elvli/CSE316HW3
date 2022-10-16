@@ -13,14 +13,6 @@ function EditToolbar() {
 
     let enabledButtonClass = "playlister-button";
 
-    function handleAddSong() {
-        let index = store.getPlaylistSize();
-        console.log("index" + index);
-        let song = {"title": "Untitled",
-            "artist": "Unknown",
-            "youTubeId": "dQw4w9WgXcQ"};
-        store.createSong(index, song);
-    }
     function handleUndo() {
         store.undo();
     }
@@ -30,6 +22,17 @@ function EditToolbar() {
     function handleClose() {
         history.push("/");
         store.closeCurrentList();
+    }
+    function handleCreateSong(){
+        if (store.currentList){
+            let song = {
+                "title": "Untitled",
+                "artist": "Unknown",
+                "youTubeId": "dQw4w9WgXcQ"
+            };
+            store.createSong(store.getPlaylistSize(), song);
+        }
+        
     }
     let editStatus = false;
     if (store.isListNameEditActive) {
@@ -42,8 +45,8 @@ function EditToolbar() {
                 id='add-song-button'
                 disabled={editStatus}
                 value="+"
+                onClick={handleCreateSong}
                 className={enabledButtonClass}
-                onClick={handleAddSong}
             />
             <input
                 type="button"

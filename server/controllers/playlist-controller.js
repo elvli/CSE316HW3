@@ -17,7 +17,6 @@ createPlaylist = (req, res) => {
     }
 
     const playlist = new Playlist(body);
-
     if (!playlist) {
         return res.status(400).json({ success: false, error: err })
     }
@@ -38,15 +37,6 @@ createPlaylist = (req, res) => {
             })
         })
 }
-deletePlaylist = async (req, res) => {
-    await Playlist.findByIdAndDelete({ _id: req.params.id }, (err, list) => {
-        
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        return res.status(200).json({ success: true, data: list })
-    }).catch(err => console.log(err)) 
-}
 getPlaylistById = async (req, res) => {
     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
         if (err) {
@@ -64,7 +54,7 @@ getPlaylists = async (req, res) => {
         if (!playlists.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Playlist not found` })
+                .json({ success: false, error: `Playlists not found` })
         }
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
@@ -94,100 +84,24 @@ getPlaylistPairs = async (req, res) => {
         }
     }).catch(err => console.log(err))
 }
+deletePlaylist = async (req, res) => {
+    await Playlist.findOneAndDelete({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        return res.status(200).json({ success: true, data: list })
+    }).catch(err => console.log(err))
+}
 updatePlaylistById = async (req, res) => {
-    const body = req.body;
-
-    if (!body) {
-        return res.status(400).json({
-            success: false,
-            error: 'You must provide a Playlist',
-        })
-    }
-
-    await Playlist.findOne({ _id: req.params.id }, (err, list) => {
-        if (err) {
-            return res.status(404).json({err, message: "Playlist not found",})
+    let body = req.body
+    await Playlist.findByIdAndUpdate({_id: body._id}, body.playlist, {new: true, useFindAndModify: false},(err, list) => {
+        if (err){
+            return res.status(400).json({ success: false, error: err })
         }
-        list.name = body.name
-        list
-            .save()
-            .then(() => {
-                return res.status(200).json({
-                    success: true,
-                    id: list._id,
-                    message: 'List updated!',
-                })
-            }).catch(error => {
-                return res.status(400).json({
-                    error,
-                    message: 'Playlist Not Created!',
-                })
-            })
-    })
+        return res.status(200).json({ success: true, data: list })
+    }).catch(err => console.log(err))
 }
-createSong = async (req, res) => {
-    const body = req.body;
 
-    if (!body) {
-        return res.status(400).json({
-            success: false,
-            error: 'You must provide a Playlist',
-        })
-    }
-
-    await Playlist.findOne({ _id: req.params.id }, (err, list) => {
-        if (err) {
-            return res.status(404).json({err, message: "Playlist not found",})
-        }
-        list.songs.splice(body.index, 0, body.song);
-        list
-            .save()
-            .then(() => {
-                return res.status(200).json({
-                    success: true,
-                    id: list._id,
-                    message: 'List updated!',
-                })
-            }).catch(error => {
-                return res.status(400).json({
-                    error,
-                    message: 'Playlist Not Created!',
-                })
-            })
-    })
-}
-// deleteSong = async (req, res) => {
-//     const body = req.body;
-
-//     if (!body) {
-//         return res.status(400).json({
-//             success: false,
-//             error: 'You must provide a Playlist',
-//         })
-//     }
-
-//     await Playlist.findOne({ _id: req.params.id }, (err, list) => {
-//         if (err) {
-//             return res.status(404).json({err, message: "Playlist not found",})
-//         }
-//         list.songs.splice(list.songs.length, 1);
-//         console.log(songs);
-//         list
-//             .save()
-//             .then(() => {
-//                 return res.status(200).json({
-//                     success: true,
-//                     id: list._id,
-//                     message: 'List updated!',
-//                 })
-//             }).catch(error => {
-//                 return res.status(400).json({
-//                     error,
-//                     message: 'Playlist Not Created!',
-//                 })
-//             })
-//     })
-// }
 
 module.exports = {
     createPlaylist,
@@ -195,6 +109,5 @@ module.exports = {
     getPlaylistPairs,
     getPlaylistById,
     deletePlaylist,
-    createSong,
-    updatePlaylistById,
+    updatePlaylistById
 }
