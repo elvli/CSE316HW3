@@ -34,7 +34,7 @@ function ListCard(props) {
 
     function toggleEdit() {
         let newActive = !editActive;
-        if (newActive) {
+        if (newActive || store.editMode) {
             store.setIsListNameEditActive(idNamePair);
         }
         setEditActive(newActive);
@@ -62,6 +62,9 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+    // if (store.editMode) {
+    //     handleToggleEdit();
+    // }
     let cardElement =
         <div
             id={idNamePair._id}

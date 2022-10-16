@@ -16,7 +16,7 @@ function DeleteSongModal() {
         store.closeModal("delete-song-modal");
     }
 
-    let songTitle = store.getMarkedSongName();
+    let songTitle = store.getMarkedSongTitle();
 
     let modal = 
     <div 

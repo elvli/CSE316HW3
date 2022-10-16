@@ -253,6 +253,10 @@ span {
   font-size: 14pt;
 }
 
+.modal-text-input {
+  float: right;
+}
+
 #title-prompt {
   grid-column: 1 / 2;
   grid-row: 1 / 2;

@@ -43,9 +43,13 @@ function SongCard(props) {
         // ASK THE MODEL TO MOVE THE DATA
         store.moveSong(sourceIndex, targetIndex);
     }
+
     function handleDeleteSong(event) {
-        console.log({song: song, index: index});
         store.markSongForDeletion({song: song, index: index});
+    }
+
+    function handleEditSong(event) {
+        store.markSongForEdit({song: song, index: index});
     }
 
     return (
@@ -58,6 +62,7 @@ function SongCard(props) {
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
+            onDoubleClick={handleEditSong}
             draggable="true"
         >
             {index + 1}.
