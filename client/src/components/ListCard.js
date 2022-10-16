@@ -16,7 +16,7 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
 
     function handleLoadList(event) {
-        if (!event.target.disabled) {
+        if (!event.target.disabled && event.target.id == idNamePair._id) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
@@ -34,7 +34,7 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setlistNameActive();
+            store.setIsListNameEditActive();
         }
         setEditActive(newActive);
     }
@@ -49,13 +49,7 @@ function ListCard(props) {
     }
 
     function handleDeletePlaylist(event) {
-        let id = event.target.id.substring("delete-list-".length);
-        //let id = event.target.id;
-        event.target.disabled = true;
-        console.log("handleDeletePlaylist: " + id);
-        store.deletePlaylist(id);
-   
-        //store.setCurrentList(null);
+        store.markListForDeletion(idNamePair);
     }
 
     function handleUpdateText(event) {
