@@ -94,6 +94,41 @@ getPlaylistPairs = async (req, res) => {
         }
     }).catch(err => console.log(err))
 }
+// updatePlaylistById = async (req, res) => {
+//     const body = req.body
+
+//     if(!body) {
+//         return res.status(400).json({
+//             success: false,
+//             error: 'You must provide a body to update',
+//         })
+//     }
+//     await Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
+//         if (err) {
+//             return res.status(404).json({
+//                 err,
+//                 message: 'Playlist not found!',
+//             })
+//         }
+//         playlist.name = body.name
+//         playlist.songs = body.songs
+//         playlist
+//             .save()
+//             .then(() => {
+//                 return res.status(200).json({
+//                     success: true,
+//                     id: playlist._id,
+//                     message: 'Playlist updated',
+//                 })
+//             })
+//             .catch(error => {
+//                 return res.status(404).json({
+//                     error,
+//                     message: 'Movie not updated',
+//                 })
+//             })
+//     })
+// }
 updatePlaylistById = async (req, res) => {
     const body = req.body;
 
@@ -115,15 +150,15 @@ updatePlaylistById = async (req, res) => {
                 return res.status(200).json({
                     success: true,
                     id: list._id,
-                    message: 'List updated!',
+                    message: 'Playlist Updated!',
                 })
             }).catch(error => {
                 return res.status(400).json({
                     error,
-                    message: 'Playlist Not Created!',
+                    message: 'Playlist Not Updated!',
                 })
             })
-    })
+    }).catch(err => console.log(err))
 }
 createSong = async (req, res) => {
     const body = req.body;
