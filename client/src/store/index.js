@@ -2,6 +2,7 @@ import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
 import createSong_Transaction from '../transactions/createSong_Transaction.js';
+import deleteSong_Transaction from '../transactions/deleteSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
 
 // OUR TRANSACTIONS
@@ -545,6 +546,11 @@ export const useGlobalStore = () => {
         tps.addTransaction(transaction);
     }
 
+    store.addDeleteSongTransaction = function (index, song) {
+        let transaction = new deleteSong_Transaction(store, index, song);
+        tps.addTransaction(transaction);
+    }
+
     store.markSongForDeletion = function (songNameIndexPair) {
         storeReducer({
             type: GlobalStoreActionType.MARK_SONG_FOR_DELETION,
@@ -557,6 +563,12 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.MARK_SONG_FOR_EDIT,
             payload: songNameIndexPair
         })
+    }
+
+    store.getMarkedSong = () => {
+        if(store.markDeleteSong) {
+            return store.markDeleteSong.song;
+        }
     }
 
     store.getMarkedSongTitle = () => {

@@ -30,15 +30,16 @@ function EditToolbar() {
                 "artist": "Unknown",
                 "youTubeId": "dQw4w9WgXcQ"
             };
-            //store.createSong(store.getPlaylistSize(), song);
             store.addCreateSongTransaction(store.getPlaylistSize(), song);
         }
-        
     }
+
     let editStatus = false;
+
     if (store.isListNameEditActive) {
         editStatus = true;
     }
+    
     return (
         <span id="edit-toolbar">
             <input
