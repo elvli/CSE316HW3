@@ -3,6 +3,7 @@ import jsTPS from '../common/jsTPS'
 import api from '../api'
 import createSong_Transaction from '../transactions/createSong_Transaction.js';
 import deleteSong_Transaction from '../transactions/deleteSong_Transaction.js';
+import editSong_Transaction from '../transactions/editSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
 
 // OUR TRANSACTIONS
@@ -551,6 +552,10 @@ export const useGlobalStore = () => {
         tps.addTransaction(transaction);
     }
 
+    store.addEditSongTransaction = function (index, oldSong, newSong) {
+        let transaction = new editSong_Transaction(store, index, oldSong, newSong);
+        tps.addTransaction(transaction);
+    }
     store.markSongForDeletion = function (songNameIndexPair) {
         storeReducer({
             type: GlobalStoreActionType.MARK_SONG_FOR_DELETION,

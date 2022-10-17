@@ -5,17 +5,21 @@ import { GlobalStoreContext } from '../store'
 function EditSongModal() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
-
     function handleConfirmModal(event){
         event.stopPropagation();
+        let oldSong = { "title": store.getMarkedSongTitle(),
+            "artist": store.getMarkedSongArtist(),
+            "youTubeId": store.getMarkedSongYouTubeId()
+        };
+
         let newTitle = document.getElementById("edit-song-title").value;
         let newArtist = document.getElementById("edit-song-artist").value;
         let newYouTubeId = document.getElementById("edit-song-youTubeId").value;
-        let song = { "title": newTitle,
+        let newSong = { "title": newTitle,
             "artist": newArtist,
             "youTubeId": newYouTubeId
         };
-        store.editSong(store.getMarkedSongIndex(), song);
+        store.addEditSongTransaction(store.getMarkedSongIndex(), oldSong, newSong);
     }
 
     function handleCancelModal(event){
