@@ -1,7 +1,13 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
+import createSong_Transaction from '../transactions/createSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
+
+// OUR TRANSACTIONS
+// import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
+// import RemoveSong_Transaction from './transactions/RemoveSong_Transaction.js';
+// import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -532,6 +538,11 @@ export const useGlobalStore = () => {
         }
         asyncChangeListName();
         store.closeModal("edit-song-modal")
+    }
+
+    store.addCreateSongTransaction = function (index, song) {
+        let transaction = new createSong_Transaction(store, index, song);
+        tps.addTransaction(transaction);
     }
 
     store.markSongForDeletion = function (songNameIndexPair) {
