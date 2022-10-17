@@ -4,6 +4,7 @@ import api from '../api'
 import createSong_Transaction from '../transactions/createSong_Transaction.js';
 import deleteSong_Transaction from '../transactions/deleteSong_Transaction.js';
 import editSong_Transaction from '../transactions/editSong_Transaction.js';
+import moveSong_Transaction from '../transactions/moveSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
 
 // OUR TRANSACTIONS
@@ -542,20 +543,30 @@ export const useGlobalStore = () => {
         store.closeModal("edit-song-modal")
     }
 
+    // THIS FUNCTION ADDS A createSong_Transaction TO THE TRANSACTION STACK
     store.addCreateSongTransaction = function (index, song) {
         let transaction = new createSong_Transaction(store, index, song);
         tps.addTransaction(transaction);
     }
 
+    // THIS FUNCTION ADDS A deleteSong_Transaction TO THE TRANSACTION STACK
     store.addDeleteSongTransaction = function (index, song) {
         let transaction = new deleteSong_Transaction(store, index, song);
         tps.addTransaction(transaction);
     }
 
+    // THIS FUNCTION ADDS AN editSong_Transaction TO THE TRANSACTION STACK
     store.addEditSongTransaction = function (index, oldSong, newSong) {
         let transaction = new editSong_Transaction(store, index, oldSong, newSong);
         tps.addTransaction(transaction);
     }
+    
+    // THIS FUNCTION ADDS A moveSong_Transaction TO THE TRANSACTION STACK
+    store.addMoveSongTransaction = function (sourceIndex, targetIndex) {
+        let transaction = new moveSong_Transaction(store, sourceIndex, targetIndex);
+        tps.addTransaction(transaction);
+    }
+
     store.markSongForDeletion = function (songNameIndexPair) {
         storeReducer({
             type: GlobalStoreActionType.MARK_SONG_FOR_DELETION,

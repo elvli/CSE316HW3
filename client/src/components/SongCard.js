@@ -41,7 +41,8 @@ function SongCard(props) {
         setdraggedTo(false);
 
         // ASK THE MODEL TO MOVE THE DATA
-        store.moveSong(sourceIndex, targetIndex);
+        //store.moveSong(sourceIndex, targetIndex);
+        store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
 
     function handleDeleteSong(event) {

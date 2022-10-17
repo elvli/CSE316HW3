@@ -10,7 +10,7 @@ import jsTPS_Transaction from "../common/jsTPS.js"
 export default class deleteSong_Transaction extends jsTPS_Transaction {
     constructor(store, index, song) {
         super();
-        this.store = store
+        this.store = store;
         this.index = index;
         this.song = song;
     }

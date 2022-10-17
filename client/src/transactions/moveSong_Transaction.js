@@ -7,20 +7,19 @@ import jsTPS_Transaction from "../common/jsTPS.js"
  * 
  * @author Elven Li
  */
-export default class editSong_Transaction extends jsTPS_Transaction {
-    constructor(store, index, oldSong, newSong) {
+export default class moveSong_Transaction extends jsTPS_Transaction {
+    constructor(store, sourceIndex, targetIndex) {
         super();
         this.store = store;
-        this.index = index;
-        this.oldSong = oldSong;
-        this.newSong = newSong;
+        this.sourceIndex = sourceIndex;
+        this.targetIndex = targetIndex;
     }
 
     doTransaction() {
-        this.store.editSong(this.index, this.newSong);
+        this.store.moveSong(this.sourceIndex, this.targetIndex);
     }
     
     undoTransaction() {
-        this.store.editSong(this.index, this.oldSong);
+        this.store.moveSong(this.targetIndex, this.sourceIndex);
     }
 }
