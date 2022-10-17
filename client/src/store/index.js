@@ -1,16 +1,11 @@
 import { createContext, useState } from 'react'
-import jsTPS from '../common/jsTPS'
+import jsTPS, { jsTPS_Transaction } from '../common/jsTPS'
 import api from '../api'
 import createSong_Transaction from '../transactions/createSong_Transaction.js';
 import deleteSong_Transaction from '../transactions/deleteSong_Transaction.js';
 import editSong_Transaction from '../transactions/editSong_Transaction.js';
 import moveSong_Transaction from '../transactions/moveSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
-
-// OUR TRANSACTIONS
-// import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
-// import RemoveSong_Transaction from './transactions/RemoveSong_Transaction.js';
-// import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -224,15 +219,19 @@ export const useGlobalStore = () => {
                 return store;
         }
     }
+
     store.isDeleteListModalOpen = () => {
         return store.currentModal === CurrentModal.DELETE_LIST;
     }
+
     store.isEditSongModalOpen = () => {
         return store.currentModal === CurrentModal.EDIT_SONG;
     }
+
     store.isDeleteSongModalOpen = () => {
         return store.currentModal === CurrentModal.DELETE_SONG;
     }
+
     store.closeModal = (modal) => {
         document.getElementById(modal).classList.remove("is-visible");
         storeReducer({
@@ -240,11 +239,11 @@ export const useGlobalStore = () => {
             payload: null,
         })
     }
+
     store.moveSong = function (sourceIndex, newIndex) {
         async function asyncChangeListName() {
             let response = await api.getPlaylistById(store.currentList._id);
             if (response.data.success) {
-                console.log(response)
                 let playlist = response.data.playlist;
                 let swap = playlist.songs[sourceIndex]
                 playlist.songs[sourceIndex] = playlist.songs[newIndex]
@@ -277,19 +276,17 @@ export const useGlobalStore = () => {
         }
         asyncChangeListName();
     }
+
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = function (id, newName) {
-        // GET THE LIST
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id._id);
             if (response.data.success) {
-                console.log(response)
                 let playlist = response.data.playlist;
-                console.log(playlist)
                 playlist.name = newName;
                 async function updateList(playlist) {
                     let update = 
@@ -326,6 +323,7 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
+        tps.clearAllTransactions();
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -349,7 +347,6 @@ export const useGlobalStore = () => {
     store.setCurrentList = function (id) {
         async function asyncSetCurrentList(id) {
             let response = await api.getPlaylistById(id);
-            console.log(id)
             if (response.data.success) {
                 let playlist = response.data.playlist;
 
@@ -418,29 +415,11 @@ export const useGlobalStore = () => {
         })
     }
 
-    store.deletePlaylist = function () {
-        async function asyncDeletePlaylist() {
-            console.log(store.markDeleteList)
-            const response = await api.deletePlaylist(store.markDeleteList._id);
-            if (response.data.success) {
-                storeReducer({
-                    type: GlobalStoreActionType.DELETE_PLAYLIST,
-                    payload: null
-                    });
-                store.closeModal("delete-list-modal")
-                store.loadIdNamePairs();
-            }   
-        }
-        asyncDeletePlaylist();
-    }
-
     store.createSong = function (index, song) {
         async function asyncChangeListName() {
             let response = await api.getPlaylistById(store.currentList._id);
             if (response.data.success) {
-                console.log(response)
                 let playlist = response.data.playlist;
-                console.log(playlist)
                 playlist.songs.splice(index, 0, song);
                 async function updateList(playlist) {
                     let update = 
@@ -541,6 +520,14 @@ export const useGlobalStore = () => {
         }
         asyncChangeListName();
         store.closeModal("edit-song-modal")
+    }
+
+    store.hasTransactionToRedo = function() {
+        return tps.hasTransactionToRedo();
+    }
+
+    store.hasTransactionToUndo = function() {
+        return tps.hasTransactionToUndo();
     }
 
     // THIS FUNCTION ADDS A createSong_Transaction TO THE TRANSACTION STACK

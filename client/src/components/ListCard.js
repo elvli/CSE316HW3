@@ -34,7 +34,7 @@ function ListCard(props) {
 
     function toggleEdit() {
         let newActive = !editActive;
-        if (newActive || store.editMode) {
+        if (newActive) {
             store.setIsListNameEditActive(idNamePair);
         }
         setEditActive(newActive);
@@ -58,12 +58,15 @@ function ListCard(props) {
     if (selected) {
         selectClass = "selected-list-card";
     }
+
     let cardStatus = false;
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
     // if (store.editMode) {
-    //     handleToggleEdit();
+    //     let newActive = !editActive;
+    //     setEditActive(newActive);
     // }
     let cardElement =
         <div

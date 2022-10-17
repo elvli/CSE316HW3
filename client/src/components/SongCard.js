@@ -67,8 +67,10 @@ function SongCard(props) {
             draggable="true"
         >
             {index + 1}.
+            <span>&nbsp;</span>
             <a
                 id={'song-' + index + '-link'}
+                target="_blank"
                 className="song-link"
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}

@@ -34,11 +34,32 @@ function EditToolbar() {
         }
     }
 
-    let editStatus = false;
-
-    if (store.isListNameEditActive) {
-        editStatus = true;
+    let editStatus = true;
+    if (store.currentList) {
+        editStatus = false;
     }
+
+    // if (!store.hasTransactionToUndo()) {
+    //     document.getElementById('undo-button').classList.remove("disabled");
+    // }
+    // else {
+    //     document.getElementById('undo-button').classList.add("disabled");
+    // }
+
+    // if (!store.hasTransactionToRedo()) {
+    //     document.getElementById('redo-button').classList.remove("disabled");
+    // }
+    // else {
+    //     document.getElementById('redo-button').classList.add("disabled");
+    // }
+    // if (!editStatus) {
+    //     document.getElementById('add-song-button').classList.remove("disabled");
+    //     document.getElementById('close-button').classList.remove("disabled");
+    // }
+    // else {
+    //     document.getElementById('add-song-button').classList.add("disabled");
+    //     document.getElementById('close-button').classList.add("disabled");
+    // }
     
     return (
         <span id="edit-toolbar">
@@ -53,15 +74,16 @@ function EditToolbar() {
             <input
                 type="button"
                 id='undo-button'
-                disabled={editStatus}
+                disabled={!store.hasTransactionToUndo()}
                 value="⟲"
                 className={enabledButtonClass}
                 onClick={handleUndo}
+
             />
             <input
                 type="button"
                 id='redo-button'
-                disabled={editStatus}
+                disabled={!store.hasTransactionToRedo()}
                 value="⟳"
                 className={enabledButtonClass}
                 onClick={handleRedo}
