@@ -20,8 +20,7 @@ function ListCard(props) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
-                
-            // CHANGE THE CURRENT LIST
+
             store.setCurrentList(_id);
         }
     }
@@ -64,10 +63,6 @@ function ListCard(props) {
         cardStatus = true;
     }
 
-    // if (store.editMode) {
-    //     let newActive = !editActive;
-    //     setEditActive(newActive);
-    // }
     let cardElement =
         <div
             id={idNamePair._id}

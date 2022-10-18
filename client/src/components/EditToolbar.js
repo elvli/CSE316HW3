@@ -38,28 +38,6 @@ function EditToolbar() {
     if (store.currentList) {
         editStatus = false;
     }
-
-    // if (!store.hasTransactionToUndo()) {
-    //     document.getElementById('undo-button').classList.remove("disabled");
-    // }
-    // else {
-    //     document.getElementById('undo-button').classList.add("disabled");
-    // }
-
-    // if (!store.hasTransactionToRedo()) {
-    //     document.getElementById('redo-button').classList.remove("disabled");
-    // }
-    // else {
-    //     document.getElementById('redo-button').classList.add("disabled");
-    // }
-    // if (!editStatus) {
-    //     document.getElementById('add-song-button').classList.remove("disabled");
-    //     document.getElementById('close-button').classList.remove("disabled");
-    // }
-    // else {
-    //     document.getElementById('add-song-button').classList.add("disabled");
-    //     document.getElementById('close-button').classList.add("disabled");
-    // }
     
     return (
         <span id="edit-toolbar">

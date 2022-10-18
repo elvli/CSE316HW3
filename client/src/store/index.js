@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import jsTPS, { jsTPS_Transaction } from '../common/jsTPS'
 import api from '../api'
 import createSong_Transaction from '../transactions/createSong_Transaction.js';
@@ -49,8 +49,7 @@ export const useGlobalStore = () => {
         listNameActive: false,
         markDeleteList: null,
         currentModal: CurrentModal.NONE,
-        markDeleteSong: null,
-        editMode: false,
+        markDeleteSong: null
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -67,8 +66,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -80,8 +78,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 })
             }
             // CREATE A NEW LIST
@@ -93,8 +90,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: true,
+                    markDeleteSong: null
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -106,8 +102,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -119,8 +114,7 @@ export const useGlobalStore = () => {
                     listNameActive: store.listNameActive,
                     markDeleteList: payload,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
             // UPDATE A LIST
@@ -132,8 +126,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
             // START EDITING A LIST NAME
@@ -145,8 +138,7 @@ export const useGlobalStore = () => {
                     listNameActive: true,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
             // delting a playlist
@@ -158,8 +150,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 })
        
             }// OPENS THE DELETE PLAYLIST MODAL
@@ -171,8 +162,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: payload,
                     currentModal: CurrentModal.DELETE_LIST,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
 
@@ -184,8 +174,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.NONE,
-                    markDeleteSong: null,
-                    editMode: false,
+                    markDeleteSong: null
                 });
             }
 
@@ -197,8 +186,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.DELETE_SONG,
-                    markDeleteSong: payload,
-                    editMode: false,
+                    markDeleteSong: payload
                 });
             }
 
@@ -210,8 +198,7 @@ export const useGlobalStore = () => {
                     listNameActive: false,
                     markDeleteList: null,
                     currentModal: CurrentModal.EDIT_SONG,
-                    markDeleteSong: payload,
-                    editMode: false,
+                    markDeleteSong: payload
                 });
             }
 
@@ -321,7 +308,7 @@ export const useGlobalStore = () => {
     store.closeCurrentList = function () {
         storeReducer({
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
-            payload: {}
+            payload: null
         });
         tps.clearAllTransactions();
     }
@@ -386,7 +373,7 @@ export const useGlobalStore = () => {
                         payload: playlist
                     });
                     store.newListCounter += 1;
-                    store.loadIdNamePairs();
+                    store.setCurrentList(playlist._id);
                 }   
             }
         }
@@ -618,6 +605,30 @@ export const useGlobalStore = () => {
         });
         store.setIsListNameEditActive = true;
     }
+
+    // THIS FUNCTION DETECTS THE USERS KEY INPUTS
+    // IF IT DETECTS CTRL Y/Z IT WILL CALL REDO/UNDO
+    useEffect(() => {
+        const keyDownHandler = event => {
+        // CHECKS IF CTRL IS BEING HELD
+            if (event.ctrlKey) {
+                event.preventDefault();
+                // IF Z IF PRESSED THEN PERFORM UNDO
+                if (event.keyCode === 90) {
+                    store.undo();
+                }
+                // IF Y IS PRESSED THEN PERFORM REDO
+                else if (event.keyCode === 89) {
+                    store.redo();
+                }
+            }
+        };
+        document.addEventListener('keydown', keyDownHandler);
+    
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler);
+        };
+    }, []);
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };

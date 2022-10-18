@@ -39,9 +39,6 @@ function SongCard(props) {
         let sourceIndex = Number(event.dataTransfer.getData("song"));
         setisDragging(false);
         setdraggedTo(false);
-
-        // ASK THE MODEL TO MOVE THE DATA
-        //store.moveSong(sourceIndex, targetIndex);
         store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
 

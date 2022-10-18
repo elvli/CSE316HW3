@@ -89,6 +89,10 @@ body {
   display: flex;
 }
 
+#add-song-button {
+  font-size: 40pt;
+}
+
 .playlister-button:hover {
   cursor: pointer;
   color:black;
