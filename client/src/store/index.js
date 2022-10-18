@@ -290,7 +290,7 @@ export const useGlobalStore = () => {
                                     type: GlobalStoreActionType.CHANGE_LIST_NAME,
                                     payload: {
                                         idNamePairs: pairsArray,
-                                        playlist: playlist
+                                        playlist: null
                                     }
                                 });
                             }
